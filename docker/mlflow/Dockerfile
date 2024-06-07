@@ -5,10 +5,10 @@ WORKDIR /mlflow
 
 RUN apt-get update && \
     apt-get -y install libpq-dev gcc && \
-    pip install mlflow psycopg2-binary
+    pip install mlflow psycopg2
 
-ENV BACKEND_URI postgresql://mlops:mlops@postgres:5432/mlops_db
+ENV BACKEND_URI postgresql+psycopg2://mlops:mlops@postgres:5432/mlops_db
 
 EXPOSE 5000
 
-CMD mlflow ui --backend-store-uri $BACKEND_URI --host 0.0.0.0
+CMD mlflow ui --backend-store-uri $BACKEND_URI --host 0.0.0.0 --default-artifact-root file:mlruns-artifacts/
