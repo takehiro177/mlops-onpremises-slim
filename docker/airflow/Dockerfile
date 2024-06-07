@@ -44,11 +44,15 @@ ARG CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints
 RUN pip install --upgrade pip && \
     useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow && \
     pip install apache-airflow==${AIRFLOW_VERSION} --constraint "${CONSTRAINT_URL}" && \
-    #pip install apache-airflow-providers-slack && \
+    pip install apache-airflow-providers-slack && \
     pip install apache-airflow-providers-http && \
+    pip install sqlalchemy && \
+    pip install pandas && \
+    pip install numpy && \
     pip install -U scikit-learn &&\
     pip install mlforecast && \
-    pip install optuna
+    pip install optuna && \
+    pip install polars
 
 # Copy the airflow.cfg file (config)
 #COPY ./config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
