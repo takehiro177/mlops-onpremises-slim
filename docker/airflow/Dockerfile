@@ -52,7 +52,8 @@ RUN pip install --upgrade pip && \
     pip install -U scikit-learn &&\
     pip install mlforecast && \
     pip install optuna && \
-    pip install polars
+    pip install polars && \
+    pip install evidently
 
 # Copy the airflow.cfg file (config)
 #COPY ./config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
