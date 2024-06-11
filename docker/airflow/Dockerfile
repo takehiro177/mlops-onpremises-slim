@@ -43,22 +43,21 @@ ARG CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints
 
 RUN pip install --upgrade pip && \
     useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow && \
-    pip install apache-airflow==${AIRFLOW_VERSION} --constraint "${CONSTRAINT_URL}" && \
+    pip install apache-airflow[postgres]==${AIRFLOW_VERSION} --constraint "${CONSTRAINT_URL}" && \
     pip install apache-airflow-providers-slack && \
     pip install apache-airflow-providers-http && \
     pip install sqlalchemy && \
+    pip install psycopg2-binary && \
     pip install pandas && \
     pip install numpy && \
     pip install -U scikit-learn &&\
     pip install mlforecast && \
     pip install optuna && \
     pip install polars && \
-    pip install evidently
+    pip install nannyml
 
-# Copy the airflow.cfg file (config)
-#COPY ./config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
-# Set the owner of the files in AIRFLOW_HOME to the user airflow
+# Set the owner of the files in AIRFLOW_HOME to the user mlops
 RUN chown -R airflow: ${AIRFLOW_HOME}
 
 # Copy the entrypoint.sh from host to container (at path AIRFLOW_HOME)
@@ -77,4 +76,4 @@ RUN mkdir -p ${AIRFLOW_HOME}/dags
 EXPOSE 8080
 
 # Execute start-airflow.sh
-CMD [ "./start-airflow.sh" ]
+CMD ["./start-airflow.sh"]

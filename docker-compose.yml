@@ -50,6 +50,23 @@ services:
       retries: 10
 
 ######################################################
+# MLFLOW
+######################################################
+
+  mlflow:
+    build: ./docker/mlflow
+    restart: always
+    container_name: mlflow
+    depends_on:
+      postgres:
+        condition: service_started
+    volumes:
+      - ./mnt/mlflow:/mlflow
+      - ./mnt/mlflow/mlruns-artifacts:/mlruns-artifacts/
+    ports:
+      - 5000:5000
+
+######################################################
 # AIRFLOW
 ######################################################
 
@@ -57,6 +74,11 @@ services:
     build: ./docker/airflow
     restart: always
     container_name: airflow
+    depends_on:
+      postgres:
+        condition: service_started
+      mlflow:
+        condition: service_started
     volumes:
       - ./mnt/airflow/airflow.cfg:/opt/airflow/airflow.cfg
       - ./mnt/airflow/dags:/opt/airflow/dags
@@ -67,19 +89,3 @@ services:
       timeout: 45s
       interval: 10s
       retries: 10
-
-######################################################
-# MLFLOW
-######################################################
-
-  mlflow:
-    build: ./docker/mlflow
-    restart: always
-    container_name: mlflow
-    volumes:
-      - ./mnt/mlflow:/mlflow
-      - ./mnt/mlflow/mlruns-artifacts:/mlruns-artifacts/
-    ports:
-      - 5000:5000
-    environment:
-      - MLFLOW_SERVER_HOST=0.0.0.0
