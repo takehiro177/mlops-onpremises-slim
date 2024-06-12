@@ -17,10 +17,11 @@ services:
       - "32769:5432"
     volumes:
       - ./mnt/postgres:/var/lib/postgresql/data/pgdata
+      - ./docker/postgres/entrypoint_initdb:/docker-entrypoint-initdb.d
     environment:
       - POSTGRES_USER=mlops
       - POSTGRES_PASSWORD=mlops
-      - POSTGRES_DB=mlops_db
+      - POSTGRES_MULTIPLE_DATABASES=mlops_db, mlflow_db
       - PGDATA=/var/lib/postgresql/data/pgdata
     healthcheck:
       test: [ "CMD", "pg_isready", "-q", "-d", "mlops_db", "-U", "mlops" ]
@@ -50,6 +51,28 @@ services:
       retries: 10
 
 ######################################################
+# AIRFLOW
+######################################################
+
+  airflow:
+    build: ./docker/airflow
+    restart: always
+    container_name: airflow
+    depends_on:
+      postgres:
+        condition: service_started
+    volumes:
+      - ./mnt/airflow/airflow.cfg:/opt/airflow/airflow.cfg
+      - ./mnt/airflow/dags:/opt/airflow/dags
+    ports:
+      - 8080:8080
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "airflow", "8080" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+
+######################################################
 # MLFLOW
 ######################################################
 
@@ -65,27 +88,3 @@ services:
       - ./mnt/mlflow/mlruns-artifacts:/mlruns-artifacts/
     ports:
       - 5000:5000
-
-######################################################
-# AIRFLOW
-######################################################
-
-  airflow:
-    build: ./docker/airflow
-    restart: always
-    container_name: airflow
-    depends_on:
-      postgres:
-        condition: service_started
-      mlflow:
-        condition: service_started
-    volumes:
-      - ./mnt/airflow/airflow.cfg:/opt/airflow/airflow.cfg
-      - ./mnt/airflow/dags:/opt/airflow/dags
-    ports:
-      - 8080:8080
-    healthcheck:
-      test: [ "CMD", "nc", "-z", "airflow", "8080" ]
-      timeout: 45s
-      interval: 10s
-      retries: 10
