@@ -1,0 +1,92 @@
+from airflow import DAG
+from airflow.providers.http.sensors.http import HttpSensor
+from airflow.sensors.filesystem import FileSensor
+from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
+
+from datetime import datetime, timedelta
+import csv
+import requests
+import json
+
+default_args = {
+    "owner": "airflow",
+    "email_on_failure": False,
+    "email_on_retry": False,
+    "email": "admin@localhost.com",
+    "retries": 1,
+    "retry_delay": timedelta(minutes=5)
+}
+
+def download_sample():
+    BASE_URL = ""
+    ENDPOINTS = {
+        'key': 'file',
+    }
+    with open('/opt/airflow/dags/files/sample.csv') as sample:
+        reader = csv.DictReader(sample, delimiter=';')
+        for idx, row in enumerate(reader):
+            base = row['base']
+            with_pairs = row['with_pairs'].split(' ')
+            indata = requests.get(f"{BASE_URL}{ENDPOINTS[base]}").json()
+            outdata = {'base': base, 'rates': {}, 'last_update': indata['date']}
+            for pair in with_pairs:
+                outdata['rates'][pair] = indata['rates'][pair]
+            with open('/opt/airflow/dags/files/sample.json', 'a') as outfile:
+                json.dump(outdata, outfile)
+                outfile.write('\n')
+
+with DAG("sample_data_pipeline", start_date=datetime(2021, 1 ,1), 
+    schedule_interval="@daily", default_args=default_args, catchup=False) as dag:
+
+    create_pet_table = SQLExecuteQueryOperator(
+    task_id="create_pet_table",
+    conn_id="postgres_default",
+    sql="sql/pet_schema.sql",
+    )
+    
+    populate_pet_table = SQLExecuteQueryOperator(
+    task_id="populate_pet_table",
+    conn_id="postgres_default",
+    sql="sql/pet_schema.sql",
+    )
+
+    get_birth_date = SQLExecuteQueryOperator(
+        task_id="get_birth_date",
+        conn_id="postgres_default",
+        sql="sql/birth_date.sql",
+        params={"begin_date": "2020-01-01", "end_date": "2020-12-31"},
+        hook_params={"options": "-c statement_timeout=3000ms"},
+    )
+
+    is_sample_available = HttpSensor(
+        task_id="is_sample_available",
+        http_conn_id="sample_api",
+        endpoint="sample/12345",
+        response_check=lambda response: "data" in response.text,
+        poke_interval=5,
+        timeout=20
+    )
+
+    is_sample_file_available = FileSensor(
+        task_id="is_sample_file_available",
+        fs_conn_id="sample_path",
+        filepath="sample.csv",
+        poke_interval=5,
+        timeout=20
+    )
+
+    downloading_sample = PythonOperator(
+        task_id="downloading_rates",
+        python_callable=download_sample
+    )
+
+    saving_sample = BashOperator(
+        task_id="saving_sample",
+        bash_command="""
+            a && \
+            a
+        """
+    )
+
+    is_sample_available >> is_sample_file_available >> downloading_sample >> saving_sample
