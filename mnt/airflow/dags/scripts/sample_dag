@@ -36,28 +36,8 @@ def download_sample():
                 json.dump(outdata, outfile)
                 outfile.write('\n')
 
-with DAG("sample_data_pipeline", start_date=datetime(2021, 1 ,1), 
+with DAG("sample_data_pipeline", start_date=datetime(2024, 6 ,20), 
     schedule_interval="@daily", default_args=default_args, catchup=False) as dag:
-
-    create_pet_table = SQLExecuteQueryOperator(
-    task_id="create_pet_table",
-    conn_id="postgres_default",
-    sql="sql/pet_schema.sql",
-    )
-    
-    populate_pet_table = SQLExecuteQueryOperator(
-    task_id="populate_pet_table",
-    conn_id="postgres_default",
-    sql="sql/pet_schema.sql",
-    )
-
-    get_birth_date = SQLExecuteQueryOperator(
-        task_id="get_birth_date",
-        conn_id="postgres_default",
-        sql="sql/birth_date.sql",
-        params={"begin_date": "2020-01-01", "end_date": "2020-12-31"},
-        hook_params={"options": "-c statement_timeout=3000ms"},
-    )
 
     is_sample_available = HttpSensor(
         task_id="is_sample_available",
