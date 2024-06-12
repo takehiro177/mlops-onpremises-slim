@@ -15,5 +15,8 @@ airflow users create -e "mlops@mlops.com" -f "mlops" -l "mlops" -p "mlops" -r "A
 # Run the scheduler in background
 airflow scheduler &> /dev/null &
 
+# Run the scheduler in foreground (for docker logs)
+#exec airflow scheduler
+
 # Run the web sever in foreground (for docker logs)
 exec airflow webserver
