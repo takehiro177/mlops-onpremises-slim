@@ -29,4 +29,4 @@ See this article:(WORK IN PROGRESS)
     └───postgres
 '''
 
-Thank you for reading it
+Thank you for reading my work!
