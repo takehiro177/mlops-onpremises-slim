@@ -1,15 +1,19 @@
 # mlops-onpremise-slim
-> template for lightweight data pipeline and MLOps production environment
 
-This template for data pipeline and MLOps is intended for lightweight batch process and limited amount of AI/ML models deployment.
+> A template for a lightweight data pipeline and MLOps production environment.
 
-The environment contains Airflow and MLflow with PostgreSQL backend, where each has its own backend db.
+This template is designed for organizations that require a streamlined and efficient approach to data pipeline and deploying AI/ML models. It is ideal for scenarios involving lightweight batch processing and deploying a limited number of models.
 
-For full data pipeline and MLOps environment, extending the template by integrating Kubeflow, Hadoop, Hive, Apache Spark, and Feast are considered.
-See this article:(WORK IN PROGRESS)
+The environment includes Airflow and MLflow with a PostgreSQL backend, each with its own dedicated database. This ensures data integrity and provides a robust foundation for managing workflows and model tracking.
 
-## Directory Tree
-'''bash
+For organizations seeking a comprehensive data pipeline and MLOps environment, this template can be extended by integrating Kubeflow, Hadoop, Hive, Apache Spark, and Feast. These additional components enable advanced data processing, distributed computing, and feature engineering capabilities.
+
+## Directory Structure
+
+The project directory structure is as follows:
+
+<pre>
+.
 ├───docker
 │   ├───airflow
 │   ├───mlflow
@@ -27,6 +31,6 @@ See this article:(WORK IN PROGRESS)
     │   └───plugins
     ├───mlflow
     └───postgres
-'''
+</pre>
 
 Thank you for reading my work!
