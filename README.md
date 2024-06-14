@@ -1,8 +1,8 @@
-# mlops-onpremise-slim
+# mlops-onpremises-slim
 
-> A template for a lightweight data pipeline and MLOps production environment.
+> A template for a lightweight data pipeline and MLOps production environment in a on-premises server.
 
-This template is designed for organizations that require a streamlined and efficient approach to data pipeline and deploying AI/ML models. It is ideal for scenarios involving lightweight batch processing and deploying a limited number of models.
+This template is designed for organizations that require a streamlined and efficient approach to data pipeline and deploying AI/ML models on-premises environment. It is ideal for scenarios involving lightweight batch processing and deploying a limited number of models.
 
 The environment includes Airflow and MLflow with a PostgreSQL backend, each with its own dedicated database. This ensures data integrity and provides a robust foundation for managing workflows and model tracking.
 
