@@ -6,6 +6,7 @@ This template for data pipeline and MLOps is intended for lightweight batch proc
 The environment contains Airflow and MLflow with PostgreSQL backend, where each has its own backend db.
 
 For full data pipeline and MLOps environment, extending the template by integrating Kubeflow, Hadoop, Hive, Apache Spark, and Feast are considered.
+See this article:(WORK IN PROGRESS)
 
 ## Directory Tree
 '''bash
