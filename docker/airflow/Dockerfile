@@ -52,8 +52,11 @@ RUN pip install --upgrade pip && \
     pip install numpy && \
     pip install -U scikit-learn &&\
     pip install mlforecast && \
+    pip install lightgbm && \
+    pip install catboost && \
     pip install optuna && \
     pip install polars && \
+    pip install mlflow && \
     pip install nannyml
 
 

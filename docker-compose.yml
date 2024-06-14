@@ -60,10 +60,12 @@ services:
     container_name: airflow
     depends_on:
       postgres:
-        condition: service_started
+        condition: service_healthy
     volumes:
       - ./mnt/airflow/airflow.cfg:/opt/airflow/airflow.cfg
       - ./mnt/airflow/dags:/opt/airflow/dags
+      - ./mnt/airflow/logs:/opt/airflow/logs
+      - ./mnt/airflow/plugins:/opt/airflow/plugins
     ports:
       - 8080:8080
     healthcheck:
@@ -82,9 +84,8 @@ services:
     container_name: mlflow
     depends_on:
       postgres:
-        condition: service_started
+        condition: service_healthy
     volumes:
       - ./mnt/mlflow:/mlflow
-      - ./mnt/mlflow/mlruns-artifacts:/mlruns-artifacts/
     ports:
       - 5000:5000
