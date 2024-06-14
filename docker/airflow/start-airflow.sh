@@ -15,8 +15,8 @@ airflow users create -e "mlops@mlops.com" -f "mlops" -l "mlops" -p "mlops" -r "A
 # Run the scheduler in background
 airflow scheduler &> /dev/null &
 
-# Run the scheduler in foreground (for docker logs)
-#exec airflow scheduler
-
 # Run the web sever in foreground (for docker logs)
 exec airflow webserver
+
+# add connection to postgres db
+airflow connections add 'postgres_dwh' --conn-json '{"conn_type": "postgres", "login": "mlops", "password": "mlops", "host": "postgres", "port": 5432}'
