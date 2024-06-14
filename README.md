@@ -8,6 +8,10 @@ The environment includes Airflow and MLflow with a PostgreSQL backend, each with
 
 For organizations seeking a comprehensive data pipeline and MLOps environment, this template can be extended by integrating Kubeflow, Hadoop, Hive, Apache Spark, and Feast. These additional components enable advanced data processing, distributed computing, and feature engineering capabilities.
 
+## System Diagram
+
+![system_diagram](images/mlops-onpremises-slim.png)
+
 ## Directory Structure
 
 The project directory structure is as follows:
