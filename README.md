@@ -10,7 +10,12 @@ For organizations seeking a comprehensive data pipeline and MLOps environment, t
 
 ## System Diagram
 
-![system_diagram](images/mlops-onpremises-slim.png)
+<div style="width: 50%; height: 50%">
+  
+  ![system_diagram](images/mlops-onpremises-slim.png)
+  
+</div>
+
 
 ## Directory Structure
 
