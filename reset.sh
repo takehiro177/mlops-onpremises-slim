@@ -11,6 +11,10 @@ Remove-Item -Path ./mnt/postgres/* -Exclude README.md -Recurse  #  Windows Power
 # rm -rf ./mnt/airflow/logs/!(README.md)  #  linux ONLY
 Remove-Item -Path ./mnt/airflow/logs/* -Exclude README.md -Recurse  #  Windows PowerShell ONLY
 
+# rm -rf ./mnt/airflow/dags/files/!(README.md)  #  linux ONLY
+Remove-Item -Path ./mnt/airflow/dags/files/* -Exclude README.md -Recurse  #  Windows PowerShell ONLY
+
+
 # rm -rf ./mnt/mlflow/!(README.md)  #  linux ONLY
 Remove-Item -Path ./mnt/mlflow/* -Exclude README.md -Recurse  #  Windows PowerShell ONLY
 
