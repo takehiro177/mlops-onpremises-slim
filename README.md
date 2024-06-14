@@ -6,11 +6,11 @@ This template is designed for organizations that require a streamlined and effic
 
 The environment includes Airflow and MLflow with a PostgreSQL backend, each with its own dedicated database. This ensures data integrity and provides a robust foundation for managing workflows and model tracking.
 
-For organizations seeking a comprehensive data pipeline and MLOps environment, this template can be extended by integrating Kubeflow, Hadoop, Hive, Apache Spark, and Feast. These additional components enable advanced data processing, distributed computing, and feature engineering capabilities.
+For organizations seeking a comprehensive data pipeline and MLOps environment, this template can be extended by integrating Kubeflow, Hadoop, Hive, Apache Spark, Apache Kafka, and Feast. These additional components enable advanced data processing, distributed computing, and feature engineering capabilities.
 
 ## System Diagram
 
-<div style="width: 50%; height: 50%">
+<div style="width: 30%; height: 30%">
   
   ![system_diagram](images/mlops-onpremises-slim.png)
   
