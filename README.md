@@ -9,7 +9,8 @@ For full data pipeline and MLOps environment, extending the template by integrat
 See this article:(WORK IN PROGRESS)
 
 ## Directory Tree
-'''bash
+<pre>
+.
 ├───docker
 │   ├───airflow
 │   ├───mlflow
@@ -27,6 +28,6 @@ See this article:(WORK IN PROGRESS)
     │   └───plugins
     ├───mlflow
     └───postgres
-'''
+</pre>
 
 Thank you for reading my work!
