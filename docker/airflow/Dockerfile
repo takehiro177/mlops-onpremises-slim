@@ -56,6 +56,7 @@ RUN pip install --upgrade pip && \
     pip install catboost && \
     pip install optuna && \
     pip install mlforecast && \
+    pip install mlforecast && \
     pip install polars && \
     pip install mlflow && \
     pip install nannyml && \
