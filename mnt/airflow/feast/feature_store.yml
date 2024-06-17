@@ -1,0 +1,14 @@
+project: mlops
+provider: local
+online_store:
+  type: redis
+  connection_string: "localhost:6379"
+offline_store: file
+registry:
+    registry_type: sql
+    path: postgresql+psycopg2://mlops:mlops@postgres:5432/mlflow_db
+    cache_ttl_seconds: 60
+    sqlalchemy_config_kwargs:
+        echo: false
+        pool_pre_ping: true
+        
