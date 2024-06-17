@@ -10,7 +10,7 @@ For organizations seeking a comprehensive data pipeline and MLOps environment, t
 
 ## System Diagram
 
-<div style="width: 30%; height: 30%">
+<div style="width: 20%; height: 20%">
   
   ![system_diagram](images/mlops-onpremises-slim.png)
   
