@@ -96,6 +96,33 @@ services:
 ######################################################
 
   redis:
-    image: redis:5-alpine
+    image: redis:7.2-alpine
+    volumes:
+      - ./mnt/redis:/data
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 30s
+      retries: 50
+      start_period: 30s
+    restart: always
+
+######################################################
+# FEAST
+######################################################
+
+  redis:
+    image: redis:7.2-alpine
+    volumes:
+      - ./mnt/redis:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 30s
+      retries: 50
+      start_period: 30s
+    restart: always

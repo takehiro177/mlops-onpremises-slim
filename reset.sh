@@ -17,4 +17,7 @@ Remove-Item -Path ./mnt/airflow/dags/files/* -Exclude README.md -Recurse  #  Win
 # rm -rf ./mnt/mlflow/!(README.md)  #  linux ONLY
 Remove-Item -Path ./mnt/mlflow/* -Exclude README.md -Recurse  #  Windows PowerShell ONLY
 
+# rm -rf ./mnt/redis/!(README.md)  #  linux ONLY
+Remove-Item -Path ./mnt/redis/* -Exclude README.md -Recurse  #  Windows PowerShell ONLY
+
 docker rmi -f $(docker images -a -q)

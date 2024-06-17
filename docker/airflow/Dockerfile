@@ -49,19 +49,21 @@ RUN pip install --upgrade pip && \
     pip install sqlalchemy && \
     pip install psycopg2-binary && \
     pip install pandas && \
+    pip install pandera && \
     pip install numpy && \
     pip install -U scikit-learn &&\
     pip install lightgbm && \
     pip install catboost && \
     pip install optuna && \
     pip install mlforecast && \
+    pip install mlforecast && \
     pip install polars && \
     pip install mlflow && \
-    pip install feast && \
-    pip install nannyml
+    pip install nannyml && \
+    pip install feast[redis]
 
 
-# Set the owner of the files in AIRFLOW_HOME to the user mlops
+# Set the owner of the files in AIRFLOW_HOME to the user
 RUN chown -R airflow: ${AIRFLOW_HOME}
 
 # Copy the entrypoint.sh from host to container (at path AIRFLOW_HOME)
@@ -69,6 +71,13 @@ COPY ./start-airflow.sh ./start-airflow.sh
 
 # Set the entrypoint.sh file to be executable
 RUN chmod +x ./start-airflow.sh
+
+USER root
+
+# initialize feast for quick start 
+RUN mkdir -p ${AIRFLOW_HOME}/feast_init && \
+    cd ${AIRFLOW_HOME}/feast_init && \
+    feast init my_project
 
 # Set the username to use
 USER airflow

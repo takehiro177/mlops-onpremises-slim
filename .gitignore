@@ -1,3 +1,6 @@
 # .gitignore
 mnt/postgres/*
 !mnt/postgres/README.md
+mnt/airflow/logs/*
+mnt/mlflow/*
+!mnt/mlflow/README.md

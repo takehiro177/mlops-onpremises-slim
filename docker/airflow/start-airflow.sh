@@ -3,11 +3,14 @@
 # Move to the AIRFLOW HOME directory
 cd $AIRFLOW_HOME
 
+# initialize feast
+#feast init my_project
+
 # Export environement variables
 export AIRFLOW__CORE__LOAD_EXAMPLES=False
 
 # Initiliase the metadatabase
-airflow db init
+airflow db migrate
 
 # Create User
 airflow users create -e "mlops@mlops.com" -f "mlops" -l "mlops" -p "mlops" -r "Admin" -u "takehiro"
