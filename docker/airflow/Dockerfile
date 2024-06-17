@@ -73,7 +73,7 @@ RUN chmod +x ./start-airflow.sh
 
 USER root
 
-# initialize feast
+# initialize feast for quick start 
 RUN mkdir -p ${AIRFLOW_HOME}/feast_init && \
     cd ${AIRFLOW_HOME}/feast_init && \
     feast init my_project
