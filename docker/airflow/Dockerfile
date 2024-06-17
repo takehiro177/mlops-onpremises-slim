@@ -51,12 +51,13 @@ RUN pip install --upgrade pip && \
     pip install pandas && \
     pip install numpy && \
     pip install -U scikit-learn &&\
-    pip install mlforecast && \
     pip install lightgbm && \
     pip install catboost && \
     pip install optuna && \
+    pip install mlforecast && \
     pip install polars && \
     pip install mlflow && \
+    pip install feast && \
     pip install nannyml
 
 

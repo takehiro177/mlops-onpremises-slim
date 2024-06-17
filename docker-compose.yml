@@ -16,7 +16,7 @@ services:
     ports:
       - "32769:5432"
     volumes:
-      - ./mnt/postgres:/var/lib/postgresql/data/pgdata
+      - ./mnt/postgres/pgdata:/var/lib/postgresql/data/pgdata
       - ./docker/postgres/entrypoint_initdb:/docker-entrypoint-initdb.d
     environment:
       - POSTGRES_USER=mlops
@@ -66,6 +66,7 @@ services:
       - ./mnt/airflow/dags:/opt/airflow/dags
       - ./mnt/airflow/logs:/opt/airflow/logs
       - ./mnt/airflow/plugins:/opt/airflow/plugins
+      - ./mnt/airflow/feast:/opt/airflow/projects
     ports:
       - 8080:8080
     healthcheck:
@@ -89,3 +90,12 @@ services:
       - ./mnt/mlflow:/mlflow
     ports:
       - 5000:5000
+
+######################################################
+# FEAST
+######################################################
+
+  redis:
+    image: redis:5-alpine
+    ports:
+      - "6379:6379"

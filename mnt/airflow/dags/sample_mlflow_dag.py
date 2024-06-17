@@ -28,10 +28,10 @@ def load_data():
     now = datetime.now()
     os.makedirs(f"/opt/airflow/dags/files/{now.strftime('%m-%d-%Y %H:%M:%S')}", exist_ok=True)
     
-    X_train.to_csv(f"/opt/airflow/dags/files/{now.strftime('%m-%d-%Y %H:%M:%S')}/X_train.csv", index=False)
-    X_test.to_csv(f"/opt/airflow/dags/files/{now.strftime('%m-%d-%Y %H:%M:%S')}/X_test.csv", index=False)
-    y_train.to_csv(f"/opt/airflow/dags/files/{now.strftime('%m-%d-%Y %H:%M:%S')}/y_train.csv", index=False)
-    y_test.to_csv(f"/opt/airflow/dags/files/{now.strftime('%m-%d-%Y %H:%M:%S')}/y_test.csv", index=False)
+    X_train.to_parquet(f"/opt/airflow/dags/files/{now.strftime('%m-%d-%Y %H:%M:%S')}/X_train.parquet", index=False)
+    X_test.to_parquet(f"/opt/airflow/dags/files/{now.strftime('%m-%d-%Y %H:%M:%S')}/X_test.parquet", index=False)
+    y_train.to_frame(name='y').to_parquet(f"/opt/airflow/dags/files/{now.strftime('%m-%d-%Y %H:%M:%S')}/y_train.parquet", index=False)
+    y_test.to_frame(name='y').to_parquet(f"/opt/airflow/dags/files/{now.strftime('%m-%d-%Y %H:%M:%S')}/y_test.parquet", index=False)
 
 def train_model():
 
@@ -46,10 +46,10 @@ def train_model():
     logging.exception(latest)
     logging.exception(list_of_files)
 
-    X_train = pd.read_csv(latest + "/X_train.csv")
-    X_test = pd.read_csv(latest + "/X_test.csv")
-    y_train = pd.read_csv(latest + "/y_train.csv")
-    y_test = pd.read_csv(latest + "/y_test.csv")
+    X_train = pd.read_parquet(latest + "/X_train.parquet")
+    X_test = pd.read_parquet(latest + "/X_test.parquet")
+    y_train = pd.read_parquet(latest + "/y_train.parquet")
+    y_test = pd.read_parquet(latest + "/y_test.parquet")
     
     model = cb.CatBoostClassifier()
     model.fit(X_train, y_train)
