@@ -1,5 +1,9 @@
-ARG DOCKER_IO_FEASTDEV_FEATURE_SERVER
-FROM docker.io/feastdev/feature-server:${DOCKER_IO_FEASTDEV_FEATURE_SERVER}
-ARG PYPI_ORG_PROJECT_SQLALCHEMY_COCKROACHDB
-RUN pip install -I --no-cache-dir \
-      sqlalchemy-cockroachdb==${PYPI_ORG_PROJECT_SQLALCHEMY_COCKROACHDB}
+FROM python:3.8
+
+RUN pip install "feast[redis,postgres]"
+
+COPY ./feature_store.yaml feature_store.yaml
+
+ENV FEAST_USAGE=False
+
+CMD ["feast", "serve", "-h", "0.0.0.0"]
