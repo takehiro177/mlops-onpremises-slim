@@ -23,23 +23,88 @@ The project directory structure is as follows:
 
 <pre>
 .
+│
 ├───docker
 │   ├───airflow
+│   │       Dockerfile
+│   │       start-airflow.sh
+│   │
+│   ├───feast
+│   │   │   data_sources.py
+│   │   │   Dockerfile
+│   │   │   entities.py
+│   │   │   features.py
+│   │   │   feature_services.py
+│   │   │   feature_store.yaml
+│   │   │   spark_push.ipynb
+│   │   │
+│   │   └───data
+│   │           driver_stats.parquet
+│   │           local_registry.db
+│   │
+│   ├───kafka
+│   │       Dockerfile
+│   │       driver_stats.parquet
+│   │       kafka_sample.py
+│   │
 │   ├───mlflow
+│   │       Dockerfile
+│   │
 │   └───postgres
+│       │   Dockerfile
+│       │
 │       └───entrypoint_initdb
+│               create-multiple-postgresql-databases.sh
+│
+├───images
+│       mlops-onpremises-slim.png
+│
 └───mnt
     ├───airflow
+    │   │   airflow.cfg
+    │   │
     │   ├───dags
+    │   │   │   README.md
+    │   │   │   sample_feast_dag.py
+    │   │   │   sample_mlflow_dag.py
+    │   │   │   sample_postgres_dag.py
+    │   │   │
     │   │   ├───files
+    │   │   │       README.md
+    │   │   │
+    │   │   ├───nannyml
+    │   │   │       README.md
+    │   │   │
     │   │   ├───scripts
-    │   │   │   
-    │   │   └───sql
-    │   │   
+    │   │   │   │   sample_dag
+    │   │   │   │
+    │   │   │   └───__pycache__
+    │   │   │           sample_postgres_dag.cpython-38.pyc
+    │   │   │
+    │   │   ├───sql
+    │   │   │       birth_date.sql
+    │   │   │       pet_schema.sql
+    │   │   │       populate_pet_table.sql
+    │   │   │
+    │   │   └───__pycache__
+    │   │           sample_feast_dag.cpython-38.pyc
+    │   │           sample_mlflow_dag.cpython-38.pyc
+    │   │           sample_postgres_dag.cpython-38.pyc
+    │   │
+    │   ├───feast
     │   ├───logs
     │   └───plugins
+    │           README.md
+    │
     ├───mlflow
-    └───postgres
+    │       README.md
+    │
+    ├───postgres
+    │   │   README.md
+    │   │
+    │   └───pgdata
+    └───redis
+
 </pre>
 
 Thank you for reading my work!
