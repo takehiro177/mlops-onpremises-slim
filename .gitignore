@@ -2,5 +2,8 @@
 mnt/postgres/*
 !mnt/postgres/README.md
 mnt/airflow/logs/*
+mnt/airflow/dags/files/*
 mnt/mlflow/*
 !mnt/mlflow/README.md
+mnt/redis/*
+!mnt/redis/README.md

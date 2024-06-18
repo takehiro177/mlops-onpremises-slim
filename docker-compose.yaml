@@ -1,0 +1,177 @@
+version: '0.1'
+services:
+
+######################################################
+# DATABASE SERVICE
+######################################################
+  postgres:
+    build: './docker/postgres'
+    restart: always
+    container_name: postgres
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+    ports:
+      - "32769:5432"
+    volumes:
+      - ./mnt/postgres/pgdata:/var/lib/postgresql/data/pgdata
+      - ./docker/postgres/entrypoint_initdb:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_USER=mlops
+      - POSTGRES_PASSWORD=mlops
+      - POSTGRES_MULTIPLE_DATABASES=mlops_db, mlflow_db, feast_db
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "mlops_db", "-U", "mlops" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+
+  adminer:
+    image: wodby/adminer:latest
+    restart: always
+    container_name: adminer
+    logging:
+      driver: "json-file"
+      options:
+          max-file: "5"
+          max-size: "10m"
+    ports:
+      - "32767:9000"
+    environment:
+      - ADMINER_DEFAULT_DB_DRIVER=psql
+      - ADMINER_DEFAULT_DB_HOST=postgres
+      - ADMINER_DEFAULT_DB_NAME=mlops_db
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "adminer", "9000" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+
+######################################################
+# AIRFLOW
+######################################################
+
+  airflow:
+    build: ./docker/airflow
+    restart: always
+    container_name: airflow
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./mnt/airflow/airflow.cfg:/opt/airflow/airflow.cfg
+      - ./mnt/airflow/dags:/opt/airflow/dags
+      - ./mnt/airflow/logs:/opt/airflow/logs
+      - ./mnt/airflow/plugins:/opt/airflow/plugins
+      - ./mnt/airflow/feast:/opt/airflow/projects
+    ports:
+      - 8080:8080
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "airflow", "8080" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+
+######################################################
+# MLFLOW
+######################################################
+
+  mlflow:
+    build: ./docker/mlflow
+    restart: always
+    container_name: mlflow
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./mnt/mlflow:/mlflow
+    ports:
+      - 5000:5000
+
+######################################################
+# FEAST
+######################################################
+
+  redis:
+    image: redis:7.2-alpine
+    restart: always
+    volumes:
+      - ./mnt/redis:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 30s
+      retries: 50
+      start_period: 30s
+
+  feature_server:
+    container_name: feast_feature_server
+    build: ./docker/feast
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "6566:6566"
+    links:
+      - redis
+    healthcheck:
+      test: "${DOCKER_HEALTHCHECK_TEST:-curl localhost:6566/health}"
+      interval: "5s"
+      retries: 5
+
+  push_server:
+    container_name: feast_push_server
+    build: ./docker/feast
+    restart: always
+    depends_on:
+      feature_server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    ports:
+      - "6567:6566"
+    links:
+      - redis
+
+######################################################
+# KAFKA
+######################################################
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.0.1
+    container_name: zookeeper
+    restart: always
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  broker:
+    image: confluentinc/cp-kafka:7.0.1
+    container_name: broker
+    restart: always
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+  kafka_events:
+    build: ./docker/kafka
+    restart: always
+    depends_on:
+      - broker
+    container_name: kafka_events

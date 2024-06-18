@@ -60,7 +60,7 @@ RUN pip install --upgrade pip && \
     pip install polars && \
     pip install mlflow && \
     pip install nannyml && \
-    pip install feast[redis]
+    pip install "feast[redis,postgres]"
 
 
 # Set the owner of the files in AIRFLOW_HOME to the user
@@ -74,10 +74,10 @@ RUN chmod +x ./start-airflow.sh
 
 USER root
 
-# initialize feast for quick start 
-RUN mkdir -p ${AIRFLOW_HOME}/feast_init && \
-    cd ${AIRFLOW_HOME}/feast_init && \
-    feast init my_project
+# get freeze requirements files for the current environment
+RUN mkdir -p ${AIRFLOW_HOME}/requirements && \
+    cd ${AIRFLOW_HOME}/requirements && \
+    pip freeze > requirements.txt
 
 # Set the username to use
 USER airflow

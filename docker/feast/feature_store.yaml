@@ -1,0 +1,11 @@
+project: feast_demo_local
+provider: local
+registry:
+  registry_type: sql
+  path: postgresql://mlops:mlops@postgres:5432/feast_db
+online_store:
+  type: redis
+  connection_string: redis:6379
+offline_store:
+  type: file
+entity_key_serialization_version: 2
