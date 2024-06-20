@@ -6,7 +6,7 @@ This template is designed for organizations that require a streamlined and effic
 
 The environment includes Airflow, MLflow, Feast with a PostgreSQL backend, each with its own dedicated database. Online feature store is served to redis. Feast push server and a support for streaming ingestion with Apach Kafka. This ensures data integrity and provides a robust foundation for managing data ingestion and data pipeline workflows and model tracking.
 
-For organizations seeking a data pipeline and MLOps environment for big data, this template can be extended by integrating Kubernetes, Kubeflow, Hadoop, Hive, Apache Spark. These additional components enable distributed computing fo big data. See [WORK INPROGRESS]
+For organizations seeking a data pipeline and MLOps environment for big data, this template can be extended by integrating Kubernetes, Kubeflow, Hadoop, Hive, Apache Spark, Apache Iceberg. These additional components enable distributed computing fo big data. See [WORK INPROGRESS]
 
 ## System Diagram
 
